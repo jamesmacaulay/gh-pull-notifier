@@ -31,7 +31,6 @@ class exports.GitHub
     rest.post(@requestUrl(path), obj, @requestOptions())
 
   get: (path) ->
-    console.log @requestUrl(path), @requestOptions()
     rest.get(@requestUrl(path), @requestOptions())
 
   requestOptions: ->

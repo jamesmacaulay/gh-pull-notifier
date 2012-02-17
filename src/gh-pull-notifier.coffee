@@ -15,7 +15,7 @@ web.post hookPath, (req, res) ->
   res.send "ok"
 
 port = process.env.PORT || 3000
-# web.listen port, -> console.log "Listening on port #{port}"
+web.listen port, -> console.log "Listening on port #{port}"
 
 GitHub = require('./github').GitHub
 
@@ -28,7 +28,19 @@ repoName = process.env.REPO_NAME || 'notifier_test'
 repo = new GitHub.Repo gh, repoUser, repoName
 
 
-repo.getHooks().on 'complete', (hooks) ->
-  existingId = null
+repo.getHooks().on 'success', (hooks) ->
+  existingHook = null
   for hook in hooks
-    existingId = hook.id if hook.config?.url is hookUrl
+    existingHook = hook if hook.config?.url is hookUrl
+  if existingHook
+    console.log JSON.stringify(existingHook)
+  else
+    newHook =
+      name: 'web'
+      active: true
+      events: ['issues', 'issue_comment', 'commit_comment', 'pull_request']
+      config:
+        url: hookUrl
+    repo.createHook(newHook).on 'success', (hook) -> console.log JSON.stringify(hook)
+
+
