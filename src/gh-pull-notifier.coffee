@@ -1,10 +1,10 @@
 util = require 'util'
 express = require 'express'
-GitHub = require('./github').GitHub 
+# GitHub = require('./github').GitHub 
   
-gh = new GitHub
-  user: process.env.GITHUB_USER
-  password: process.env.GITHUB_PASSWORD
+# gh = new GitHub
+  # user: process.env.GITHUB_USER
+  # password: process.env.GITHUB_PASSWORD
 
 
 # testRepo = gh.repo('jamesmacaulay', 'notifier_test')
@@ -32,14 +32,17 @@ gh = new GitHub
 # shopify.getIssueEvents().on 'success', (events, res) -> console.log res.body
 
 
-hookCatcher = express.createServer()
-# hookCatcher.use(express.bodyParser)
+web = express.createServer()
+# web.use(express.bodyParser)
 
-hookCatcher.post '/ping', (req, res) ->
+web.get '/', (req, res) ->
+  res.send "ok"
+
+web.post '/ping', (req, res) ->
   # console.log req.body
   res.send "ok"
 
-hookCatcher.listen(3000)
+web.listen(3000)
 
 
 # shopify.getIssueComments(1080).on 'success', (comments) -> console.log comments
