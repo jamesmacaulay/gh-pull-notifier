@@ -33,13 +33,13 @@ express = require 'express'
 
 
 web = express.createServer()
-# web.use(express.bodyParser)
+web.use(express.bodyParser())
 
 web.get '/', (req, res) ->
   res.send "ok"
 
 web.post '/ping', (req, res) ->
-  # console.log req.body
+  console.log req.body
   res.send "ok"
 
 port = process.env.PORT || 3000
