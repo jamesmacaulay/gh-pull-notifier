@@ -7,11 +7,11 @@ gh = new GitHub
   password: process.env.GITHUB_PASSWORD
 
 
-testRepo = gh.repo('jamesmacaulay', 'notifier_test')
-
-testRepo.getIssueEvents().on 'success', (events) ->
-  console.log events
-
+# testRepo = gh.repo('jamesmacaulay', 'notifier_test')
+# 
+# testRepo.getIssueEvents().on 'success', (events) ->
+#   console.log events
+# 
 # console.log testRepo.recipientsForHook(pullRequestHook)
 
 # gh.get("/repos/Shopify/batman/issues/events/9612378").on 'complete', (data, res) ->
@@ -32,14 +32,15 @@ testRepo.getIssueEvents().on 'success', (events) ->
 # shopify.getIssueEvents().on 'success', (events, res) -> console.log res.body
 
 
-# hookCatcher = express.createServer()
-# 
-# hookCatcher.post '/ping', (req, res) ->
-#   console.log req
-#   res.send "ok"
-# 
-# hookCatcher.listen(80)
-# 
+hookCatcher = express.createServer()
+# hookCatcher.use(express.bodyParser)
+
+hookCatcher.post '/ping', (req, res) ->
+  # console.log req.body
+  res.send "ok"
+
+hookCatcher.listen(3000)
+
 
 # shopify.getIssueComments(1080).on 'success', (comments) -> console.log comments
 

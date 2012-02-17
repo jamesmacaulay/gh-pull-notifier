@@ -9,7 +9,7 @@
   "main": "./lib/gh-pull-notifier.js",
   "dependencies": {
     "coffee-script": "1.2.0",
-    "node-xmpp":     "0.3.1",
+    "simple-xmpp":     "latest",
     "restler":       "git://github.com/danwrong/restler.git#master",
     "express":       "2.5.8"
   }
