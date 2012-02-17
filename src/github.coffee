@@ -4,19 +4,34 @@ class exports.GitHub
   class @Repo
     constructor: (@github, @user, @repo) ->
 
+    path: -> "repos/#{@user}/#{@repo}"
+
+    createHook: (hook) ->
+      @github.post(@path() + "/hooks", hook)
+
+    updateHook: (id, hook) ->
+      @github.post(@path() + "/hooks/#{id}", hook)
+
+    getHooks: ->
+      @github.get(@path() + "/hooks")
+
     getIssueEvents: ->
-      @github.get("repos/#{@user}/#{@repo}/issues/events")
+      @github.get(@path() + "/issues/events")
     
     getIssueComments: (issueId) ->
-      @github.get("repos/#{@user}/#{@repo}/issues/#{issueId}/comments")
+      @github.get(@path() + "/issues/#{issueId}/comments")
 
   constructor: (opts={}) ->
     @user = opts.user
     @password = opts.password
   
   repo: (user, repo) -> new GitHub.Repo(this, user, repo)
+  
+  post: (path, obj) ->
+    rest.post(@requestUrl(path), obj, @requestOptions())
 
   get: (path) ->
+    console.log @requestUrl(path), @requestOptions()
     rest.get(@requestUrl(path), @requestOptions())
 
   requestOptions: ->

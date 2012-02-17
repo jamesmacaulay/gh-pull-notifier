@@ -1,36 +1,8 @@
-util = require 'util'
+host = process.env.HOST || 'ghpn.herokuapp.com'
+hookPath = '/ping'
+hookUrl = "http://#{host}#{hookPath}"
+
 express = require 'express'
-# GitHub = require('./github').GitHub 
-  
-# gh = new GitHub
-  # user: process.env.GITHUB_USER
-  # password: process.env.GITHUB_PASSWORD
-
-
-# testRepo = gh.repo('jamesmacaulay', 'notifier_test')
-# 
-# testRepo.getIssueEvents().on 'success', (events) ->
-#   console.log events
-# 
-# console.log testRepo.recipientsForHook(pullRequestHook)
-
-# gh.get("/repos/Shopify/batman/issues/events/9612378").on 'complete', (data, res) ->
-#   for k,v of data
-#     console.log k
-
-# shopify = gh.repo('Shopify', 'shopify')
-
-# shopify.getIssueEvents().on 'complete', (data) ->
-  # console.log data.map (e) -> e.created_at
-  # console.log data[0].issue
-
-
-# monitor = new RepoMonitor(shopify)
-
-# console.log monitor.mentionsFromText('@ssoroka for review\r\n\r\nThe public field is filtered on for shopify wide product search, which is used by search.shopify.com. This field defaults to false, and there is no longer a way for users to enable this. Because of this, search.shopify.com will only find products for 2.8% of shops, so this pull request makes all non-password protected active shops searchable through product search.')
-
-# shopify.getIssueEvents().on 'success', (events, res) -> console.log res.body
-
 
 web = express.createServer()
 web.use(express.bodyParser())
@@ -38,13 +10,25 @@ web.use(express.bodyParser())
 web.get '/', (req, res) ->
   res.send "ok"
 
-web.post '/ping', (req, res) ->
+web.post hookPath, (req, res) ->
   console.log req.body
   res.send "ok"
 
 port = process.env.PORT || 3000
-web.listen port, -> console.log "Listening on port #{port}"
+# web.listen port, -> console.log "Listening on port #{port}"
+
+GitHub = require('./github').GitHub
+
+gh = new GitHub
+  user: process.env.GITHUB_USER
+  password: process.env.GITHUB_PASSWORD
+
+repoUser = process.env.REPO_USER || 'jamesmacaulay'
+repoName = process.env.REPO_NAME || 'notifier_test'
+repo = new GitHub.Repo gh, repoUser, repoName
 
 
-# shopify.getIssueComments(1080).on 'success', (comments) -> console.log comments
-
+repo.getHooks().on 'complete', (hooks) ->
+  existingId = null
+  for hook in hooks
+    existingId = hook.id if hook.config?.url is hookUrl
