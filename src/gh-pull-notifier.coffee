@@ -44,3 +44,7 @@ repo.getHooks().on 'success', (hooks) ->
     repo.createHook(newHook).on 'success', (hook) -> console.log JSON.stringify(hook)
 
 
+Jabber = require('./jabber').Jabber
+jabber = new Jabber
+  user: process.env.GTALK_USER
+  password: process.env.GTALK_PASSWORD
