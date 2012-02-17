@@ -42,7 +42,8 @@ web.post '/ping', (req, res) ->
   # console.log req.body
   res.send "ok"
 
-web.listen(3000)
+port = process.env.PORT || 3000
+web.listen port, -> console.log "Listening on port #{port}"
 
 
 # shopify.getIssueComments(1080).on 'success', (comments) -> console.log comments
